@@ -14,6 +14,8 @@ def main():
     pygame.init()
     clock = pygame.time.Clock()
     dt = 0
+    lives = 3
+    points = 0
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -36,11 +38,16 @@ def main():
         for roid in asteroids:
             if player.collides_with(roid) == True:
                 log_event("player_hit")
-                print("Game over!")
-                sys.exit()
+                lives -= 1
+                roid.kill()
+                if lives == 0:
+                    print("Game over!")
+                    print(f"Score: {points}")
+                    sys.exit()
             for shot in shots:
                 if shot.collides_with(roid) == True:
                     log_event("asteroid_shot")
+                    points += 1
                     shot.kill()
                     roid.split()
                 
